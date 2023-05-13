@@ -1,46 +1,35 @@
-use std::io;
 use rand::Rng;
 use std::cmp::Ordering;
-// this ordering is the enum that is the result of 2 thing being compared
+use std::io;
 
 fn main() {
-    println!("Guess the Number ");
-    // let use to declare and by default the var is unmutable to make it mutable use mut
-    let secret: i32 = rand::thread_rng().gen_range(1, 101);
+    println!("Guess the number!");
 
-    println!("The secret no. {}",secret);
-
-    //new is function and its an associative function other language called it as static method 
-    let mut guess: String = String::new();
+    let secret_number = rand::thread_rng().gen_range(1,101);
 
     loop {
-        println!("Enter your guess : ");
+        println!("Please input your guess.");
 
-        //use karne se pehle clear karlo kyuki parse vo newline character nahi samjh paega
-        guess.clear();
-    
-    // enter the input in the specified buffer
-    // it means it takes the referrence of the string and modify it without taking the ownership of the string
+        let mut guess = String::new();
+
         io::stdin()
-        .read_line(&mut guess)
-        .expect("Failed to read");
+            .read_line(&mut guess)
+            .expect("Failed to read line");
 
-        
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
 
-        let guess: i32 = guess.trim().parse().expect("Please Type in a number");
+        println!("You guessed: {guess}");
 
-        println!("Your guess {}",guess);
-
-        match guess.cmp(&secret){
-            Ordering::Less => println!("small"),
-            Ordering::Greater => println!("big"),
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
-                println!("You win");
+                println!("You win!");
                 break;
-            },
+            }
         }
     }
-
-
-
 }
